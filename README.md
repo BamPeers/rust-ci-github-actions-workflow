@@ -72,14 +72,12 @@ Steps:
     - Cache is stored at the end of the job on cache miss. Cache is not updated on cache hit.
 
 2. Generate test results and code coverage data.
-    1. It installs [cargo2junit](https://github.com/johnterickson/cargo2junit) needed for formatting the test result and [grcov](https://github.com/mozilla/grcov) and [rust-covfix](https://github.com/Kogia-sima/rust-covfix) for code coverage.
+    1. It installs [cargo2junit](https://github.com/johnterickson/cargo2junit) needed for formatting the test result and [grcov](https://github.com/mozilla/grcov) for code coverage.
     3. It runs `cargo test` in the nightly toolchain.
-    - `--features coverage` adds a `rust-covfix` feature that allows disabling inlining functions for code coverage. [Learn more.](https://github.com/Kogia-sima/rust-covfix#1-avoid-inlining-the-functions-optional)
     - `$CARGO_OPTIONS` includes `CARGO_INCREMENTAL`, `RUSTFLAGS`, and `RUSTDOCFLAGS` options needed for code coverage.
     - `-Z unstable-options --format json` formats the test result into json.
     - ` | cargo2junit > results.xml` converts the json result into junit format for `EnricoMi/publish-unit-test-result-action` to understand and saves it as `results.xml`.
     4. It generates code coverage data in lcov format through `grcov` saved as `lcov.info`.
-    5. It runs `rust-covfix` to fix incorrect Rust coverage data and saves the corrected data as `lcov_correct.info`.
 
 3. Upload test results.
     It uploads the test result (`results.xml`) through [EnricoMi/publish-unit-test-result-action@v1](https://github.com/EnricoMi/publish-unit-test-result-action).
@@ -87,7 +85,7 @@ Steps:
     - For pull requests, the action adds a comment containing the test results.
 
 4. Upload to CodeCov.
-    It uploads the code coverage result (`lcov_correct.info`) to CodeCov through [codecov/codecov-action@v1](https://github.com/codecov/codecov-action).
+    It uploads the code coverage result (`lcov.info`) to CodeCov through [codecov/codecov-action@v1](https://github.com/codecov/codecov-action).
     - For pull requests, the actions adds a comment containing the code coverage report.
     - For private repositories, add your token from CodeCov repository setting on GitHub Secrets and uncomment the line: `token: ${{ secrets.CODECOV_TOKEN }}`.
 
