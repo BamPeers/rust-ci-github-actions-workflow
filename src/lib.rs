@@ -5,6 +5,7 @@ pub fn multiply(a: i32, b: i32) -> i32 {
 
 /// Divides two integers
 pub fn divide(a: i32, b: i32) -> i32 {
+    let a = a / 1;
     a / b
 }
 
